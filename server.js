@@ -6,6 +6,7 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const path = require('path');
+const { Server } = require('ws');
 
 app.use(fileUpload({ createParentPath: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,14 +23,27 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
-// app.use('/uploads', express.static('uploads'));
 app.use(require('./routes'));
 
-sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => {
-    console.log(`Now listening on port ${PORT}`);
-  });
+// sequelize.sync() creates new tables according to the schema specified in the model
+sequelize.sync({ force: false });
+
+const server = app.listen(PORT, () => {
+  console.log(`Now listening on port ${PORT}`);
 });
+
+const wss = new Server({ server });
+
+wss.on('connection', (ws) => {
+  console.log('client connected');
+  ws.on('close', () => console.log('Client disconnected'));
+});
+
+// sequelize.sync({ force: false }).then(() => {
+//   app.listen(PORT, () => {
+//     console.log(`Now listening on port ${PORT}`);
+//   });
+// });
 
 // workflow:
 /*

@@ -41,14 +41,6 @@ const tagData = [
     name: 'Culture',
     post_id: 10,
   },
-  {
-    name: 'Decor',
-    post_id: 11,
-  },
-  {
-    name: 'Homes',
-    post_id: 12,
-  },
 ];
 
 const seedTags = () => Tag.bulkCreate(tagData);
