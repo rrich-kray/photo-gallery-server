@@ -1,6 +1,6 @@
-const { User, Post, Comment, Image } = require('../models/');
-const jwt = require('jsonwebtoken');
-const secret = "hcufvjdlshjfdhjhklhHKhjhjhljjKLHJHjhjlhjHJH786&*(^796&67896HJ*(**989HJJLHJJH**9";
+const { User, Post, Comment, Image } = require("../models/");
+const jwt = require("jsonwebtoken");
+const secret = "";
 
 const userController = {
   getAllUsers(req, res) {
@@ -52,7 +52,7 @@ const userController = {
             data: [userData.id, userData.email],
           },
           secret,
-          { expiresIn: '2h' }
+          { expiresIn: "2h" }
         );
         res.json({ user: userData, token: token });
       })
@@ -77,7 +77,7 @@ const userController = {
           { data: [userData.id, userData.email] },
           secret,
           {
-            expiresIn: '2h',
+            expiresIn: "2h",
           }
         );
         res.json({ user: userData, token: token });
@@ -101,7 +101,7 @@ const userController = {
       }
     )
       .then((userData) => {
-        res.json({ data: userData, message: 'User successfully updated.' });
+        res.json({ data: userData, message: "User successfully updated." });
       })
       .catch((err) => {
         res.json({ error: err, message: err.message });
@@ -116,7 +116,7 @@ const userController = {
       },
     })
       .then((response) => {
-        res.json({ data: response, message: 'User successfully deleted' });
+        res.json({ data: response, message: "User successfully deleted" });
       })
       .catch((err) => {
         res.json({ data: err, message: err.message });
