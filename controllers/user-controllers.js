@@ -60,13 +60,19 @@ const userController = {
   },
 
   // login
+  // Production: is it finding the user in the database?
   login(req, res) {
+    console.log(req.body.email)
     User.findOne({
       where: {
         email: req.body.email,
       },
     })
       .then((userData) => {
+        if (!userData) {
+          res.json("User does not exist.");
+          return;
+        }
         const token = jwt.sign(
           { data: [userData.id, userData.email] },
           secret,
