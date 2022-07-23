@@ -69,6 +69,7 @@ const userController = {
       },
     })
       .then((userData) => {
+        console.log(userData)
         if (!userData) {
           res.json("User does not exist.");
           return;
