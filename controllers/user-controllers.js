@@ -1,6 +1,6 @@
 const { User, Post, Comment, Image } = require('../models/');
 const jwt = require('jsonwebtoken');
-const secret = process.env.SECRET;
+const secret = "hcufvjdlshjfdhjhklhHKhjhjhljjKLHJHjhjlhjHJH786&*(^796&67896HJ*(**989HJJLHJJH**9";
 
 const userController = {
   getAllUsers(req, res) {
@@ -79,7 +79,7 @@ const userController = {
         }
         const token = jwt.sign(
           { data: [userData.id, userData.email] },
-          secret,
+          secret, // this is it. there's no secret being passed
           {
             expiresIn: '2h',
           }
