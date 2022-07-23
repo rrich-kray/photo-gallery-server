@@ -63,28 +63,23 @@ const userController = {
   // Production: is it finding the user in the database?
   // User is being found and is being logged
   login(req, res) {
-    console.log(req.body.email)
     User.findOne({
       where: {
         email: req.body.email,
       },
     })
       .then((userData) => {
-        // These are logging the correct values
-        console.log(userData.id)
-        console.log(userData.email)
         if (!userData) {
           res.json("User does not exist.");
           return;
         }
         const token = jwt.sign(
           { data: [userData.id, userData.email] },
-          secret, // this is it. there's no secret being passed
+          secret,
           {
             expiresIn: '2h',
           }
         );
-        console.log(token)
         res.json({ user: userData, token: token });
       })
       .catch((err) => {

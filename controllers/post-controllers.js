@@ -169,11 +169,12 @@ const postController = {
       return;
     }
     const file = req.files.file;
+    console.log(file)
     const originalFilenameArr = file.name.split('.');
     const extension = originalFilenameArr[originalFilenameArr.length - 1];
     const filename = uniqid();
     const filenameExt = filename + '.' + extension;
-    // if it's located on body object it's likely the .mv() method is not available on the object
+    // The problem uploading images may be associated with the file path
     file.mv(path.join(__dirname, '../uploads', filenameExt));
     res.send(filenameExt);
   },
