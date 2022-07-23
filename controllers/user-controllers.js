@@ -61,6 +61,7 @@ const userController = {
 
   // login
   // Production: is it finding the user in the database?
+  // User is being found and is being logged
   login(req, res) {
     console.log(req.body.email)
     User.findOne({
@@ -69,6 +70,7 @@ const userController = {
       },
     })
       .then((userData) => {
+        // These are logging the correct values
         console.log(userData.id)
         console.log(userData.email)
         if (!userData) {
@@ -82,6 +84,7 @@ const userController = {
             expiresIn: '2h',
           }
         );
+        console.log(token)
         res.json({ user: userData, token: token });
       })
       .catch((err) => {
