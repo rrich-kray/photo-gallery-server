@@ -1,12 +1,12 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const sequelize = require('./config/connection');
+const sequelize = require("./config/connection");
 const PORT = process.env.PORT || 3001;
-const cors = require('cors');
-const fileUpload = require('express-fileupload');
-const bodyParser = require('body-parser');
-const path = require('path');
-const { Server } = require('ws');
+const cors = require("cors");
+const fileUpload = require("express-fileupload");
+const bodyParser = require("body-parser");
+const path = require("path");
+const { Server } = require("ws");
 
 app.use(fileUpload({ createParentPath: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -14,16 +14,16 @@ app.use(bodyParser.json());
 app.use(
   cors({
     origin: [
-      'http://localhost:3000',
-      'https://photo-gallery-client-rrich.herokuapp.com',
+      "http://localhost:3000",
+      "https://photo-gallery-client-rrich.herokuapp.com",
     ],
     credentials: true,
   })
 );
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
-app.use(require('./routes'));
+app.use("/uploads", express.static("uploads"));
+app.use(require("./routes"));
 
 // sequelize.sync() creates new tables according to the schema specified in the model
 sequelize.sync({ force: false });
@@ -34,9 +34,9 @@ const server = app.listen(PORT, () => {
 
 const wss = new Server({ server });
 
-wss.on('connection', (ws) => {
-  console.log('client connected');
-  ws.on('close', () => console.log('Client disconnected'));
+wss.on("connection", (ws) => {
+  console.log("client connected");
+  ws.on("close", () => console.log("Client disconnected"));
 });
 
 // sequelize.sync({ force: false }).then(() => {
