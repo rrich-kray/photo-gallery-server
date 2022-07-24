@@ -7,6 +7,7 @@ const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
 const path = require("path");
 const { Server } = require("ws");
+const { validateFileType } = require("./utils/middleware");
 
 app.use(fileUpload({ createParentPath: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,6 +25,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 app.use(require("./routes"));
+
+/*
+Middleware
+*/
+
+app.use("/photo-gallery/api/upload", validateFileType);
+
+/*
+Middleware
+*/
 
 // sequelize.sync() creates new tables according to the schema specified in the model
 sequelize.sync({ force: false });

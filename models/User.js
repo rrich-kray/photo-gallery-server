@@ -31,6 +31,9 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+      validate: {
+        is: /\w+\@\w+\.\w+/,
+      },
     },
 
     bio: {
@@ -40,9 +43,6 @@ User.init(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        is: /^[0-9a-f]{64}$/i,
-      },
     },
   },
   {
@@ -54,14 +54,14 @@ User.init(
   }
 );
 
-// User.addHook('beforeCreate', async (newUserData) => {
-//   newUserData.password = await bcrypt.hash(newUserData.password, 10);
-//   return newUserData;
-// });
+User.addHook("beforeCreate", async (newUserData) => {
+  newUserData.password = await bcrypt.hash(newUserData.password, 10);
+  return newUserData;
+});
 
-// User.addHook('beforeUpdate', async (updatedUserData) => {
-//   updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
-//   return updatedUserData;
-// });
+User.addHook("beforeUpdate", async (updatedUserData) => {
+  updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
+  return updatedUserData;
+});
 
 module.exports = User;
