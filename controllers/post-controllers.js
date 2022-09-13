@@ -1,8 +1,7 @@
-const { Post, Image, Comment } = require('../models');
-const { Op } = require('sequelize');
-const uniqid = require('uniqid');
-const path = require('path');
-// response is going through to the server but the server is returning an empty dataset
+const { Post, Image, Comment } = require("../models");
+const { Op } = require("sequelize");
+const uniqid = require("uniqid");
+const path = require("path");
 
 const postController = {
   // Query all posts
@@ -43,7 +42,7 @@ const postController = {
     })
       .then((postData) => {
         if (!postData) {
-          res.json('No posts found with this ID!');
+          res.json("No posts found with this ID!");
           return;
         }
         res.json(postData);
@@ -116,16 +115,16 @@ const postController = {
 
   // delete post
   deletePost(req, res) {
-    Post.destroyk({
+    Post.destroy({
       where: {
         id: req.params.id,
       },
     })
       .then((response) => {
-        res.json({ response: response, message: 'Post successfully deleted' });
+        res.json({ response: response, message: "Post successfully deleted" });
       })
       .catch((err) => {
-        res.json({ error: err, message: 'Could not delete post' });
+        res.json({ error: err, message: "Could not delete post" });
       });
   },
 
@@ -163,19 +162,19 @@ const postController = {
   uploadFile(req, res) {
     if (!req.files) {
       res.send({
-        status: 'failed',
-        message: 'No file uploaded',
+        status: "failed",
+        message: "No file uploaded",
       });
       return;
     }
     const file = req.files.file;
-    console.log(file)
-    const originalFilenameArr = file.name.split('.');
+    console.log(file);
+    const originalFilenameArr = file.name.split(".");
     const extension = originalFilenameArr[originalFilenameArr.length - 1];
     const filename = uniqid();
-    const filenameExt = filename + '.' + extension;
+    const filenameExt = filename + "." + extension;
     // The problem uploading images may be associated with the file path
-    file.mv(path.join(__dirname, '../uploads', filenameExt));
+    file.mv(path.join(__dirname, "../uploads", filenameExt));
     res.send(filenameExt);
   },
 };

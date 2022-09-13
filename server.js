@@ -7,7 +7,7 @@ const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
 const path = require("path");
 const { Server } = require("ws");
-const { validateFileType } = require("./utils/middleware");
+const { validateFileType, checkForToken } = require("./utils/middleware");
 
 app.use(fileUpload({ createParentPath: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -30,7 +30,7 @@ app.use(require("./routes"));
 Middleware
 */
 
-app.use("/photo-gallery/api/upload", validateFileType);
+// app.use("/photo-gallery/api/upload", validateFileType);
 
 /*
 Middleware

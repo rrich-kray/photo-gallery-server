@@ -1,6 +1,7 @@
 const { User, Post, Comment, Image } = require("../models/");
 const jwt = require("jsonwebtoken");
-const secret = "";
+require("dotenv").config;
+const secret = process.env.SECRET;
 
 const userController = {
   getAllUsers(req, res) {
@@ -60,8 +61,6 @@ const userController = {
   },
 
   // login
-  // Production: is it finding the user in the database?
-  // User is being found and is being logged
   login(req, res) {
     User.findOne({
       where: {

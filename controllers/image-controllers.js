@@ -1,4 +1,4 @@
-const { Image } = require('../models/');
+const { Image } = require("../models/");
 
 const imageController = {
   // create a new image entry
@@ -8,6 +8,7 @@ const imageController = {
       post_id: req.body.post_id,
     })
       .then((response) => {
+        console.log(response);
         res.json(response);
       })
       .catch((err) => {
