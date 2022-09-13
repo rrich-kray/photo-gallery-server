@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { checkForToken } = require("../../utils/middleware");
+const { Validator } = require("../../utils/middleware");
 const {
   getAllUsers,
   getUserById,
@@ -15,7 +16,19 @@ router
   .get(checkForToken, getUserById)
   .put(updateUser)
   .delete(deleteUser);
-router.route("/login").post(login);
-router.route("/register").post(register);
+router
+  .route("/login")
+  .post(
+    new Validator("email").validateEmail,
+    new Validator("email").trim,
+    login
+  );
+router
+  .route("/register")
+  .post(
+    new Validator("email").validateEmail,
+    new Validator("email").trim,
+    register
+  );
 
 module.exports = router;
