@@ -35,7 +35,7 @@ class Validator {
     const regex = new RegExp(/^[A-Za-z]+$/, "i");
   }
 
-  isLength = (req, res, next) => {
+  isLength = (req, res, next, minLength, maxLength) => {
     if (
       req.body[this.property].length <= PW_MIN_LEN ||
       req.body[this.property].length >= PW_MAX_LEN

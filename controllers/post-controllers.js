@@ -1,7 +1,8 @@
-const { Post, Image, Comment } = require("../models");
+const { Post, Image, Comment, Upvote, Downvote } = require("../models");
 const { Op } = require("sequelize");
 const uniqid = require("uniqid");
 const path = require("path");
+const fs = require("fs");
 
 const postController = {
   // Query all posts
@@ -114,23 +115,61 @@ const postController = {
   },
 
   // delete post
-  deletePost(req, res) {
-    Post.destroy({
+  async deletePost(req, res) {
+    const comments = await Comment.findAll({
       where: {
-        id: req.params.id,
+        post_id: req.params.postId,
       },
-    })
-      .then((response) => {
-        res.json({ response: response, message: "Post successfully deleted" });
-      })
-      .catch((err) => {
-        res.json({ error: err, message: "Could not delete post" });
+    });
+
+    comments.map((comment) => {
+      Upvote.destroy({
+        where: {
+          comment_id: comment.id,
+        },
       });
+
+      Downvote.destroy({
+        where: {
+          comment_id: comment.id,
+        },
+      });
+    });
+
+    await Comment.destroy({
+      where: {
+        post_id: req.params.postId,
+      },
+    });
+    const image = await Image.findOne({
+      where: {
+        post_id: req.params.postId,
+      },
+    });
+    fs.unlinkSync(path.join(__dirname, "../uploads", image.filename));
+    await Image.destroy({
+      where: {
+        post_id: req.params.postId,
+      },
+    });
+
+    const response = await Post.destroy({
+      where: {
+        id: req.params.postId,
+      },
+    });
+
+    if (!response) {
+      res.json({ errorMessage: "Error deleteing post" });
+      return;
+    }
+
+    res.json(response);
   },
 
   // Update post
-  updatePost(req, res) {
-    Post.update(
+  async updatePost(req, res) {
+    await Post.update(
       { title: req.body.title },
       { content: req.body.content },
       { where: { id: req.params.id } }
@@ -142,7 +181,7 @@ const postController = {
         res.json(err);
       });
 
-    Image.update(
+    await Image.update(
       { filename: req.body.filename },
       { where: { post_id: req.params.id } }
     )
@@ -159,6 +198,8 @@ const postController = {
   // Otherwise, assign file to variable, and generate a unique file name with uniqid
   // Move file to uploads folder using .mv()
   // Create entry in Image model with unique filename and user id.
+
+  // Want to consolidate routes that create the post, upload the image, and create the image entry in the Image table
   uploadFile(req, res) {
     if (!req.files) {
       res.send({
@@ -168,7 +209,6 @@ const postController = {
       return;
     }
     const file = req.files.file;
-    console.log(file);
     const originalFilenameArr = file.name.split(".");
     const extension = originalFilenameArr[originalFilenameArr.length - 1];
     const filename = uniqid();
