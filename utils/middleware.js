@@ -60,7 +60,7 @@ class Validator {
   // Validate email matches a specific regex pattern
   validateEmail = (req, res, next) => {
     if (!req.body[this.property]) {
-      res.json("No email found in request body.");
+      res.status(400).json("No email found in request body.");
       return;
     }
     req.body[this.property].match(/[\w_\-\.]+@[\w_\-\.]+\.[\w]+/g)
