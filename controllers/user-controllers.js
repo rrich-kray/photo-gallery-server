@@ -74,7 +74,7 @@ const userController = {
       expiresIn: "2h",
     });
 
-    res.json({ user: userData, token: token });
+    res.json({ user: user, token: token });
   },
 
   // Update User
