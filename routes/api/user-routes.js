@@ -26,6 +26,7 @@ router
 router
   .route("/register")
   .post(
+    new Validator("password").isLength,
     new Validator("email").validateEmail,
     new Validator("email").trim,
     register

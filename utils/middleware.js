@@ -1,3 +1,6 @@
+const PW_MIN_LEN = 5;
+const PW_MAX_LEN = 64;
+
 class Validator {
   constructor(property = null) {
     this.property = property;
@@ -21,7 +24,7 @@ class Validator {
     ];
 
     if (!imageTypes.includes(fileType)) {
-      res.json("Invalid file type.");
+      res.json({ errorMessage: "Invalid file type." });
       return;
     }
     next();
@@ -32,40 +35,57 @@ class Validator {
     const regex = new RegExp(/^[A-Za-z]+$/, "i");
   }
 
+  isLength = (req, res, next) => {
+    if (
+      req.body[this.property].length <= PW_MIN_LEN ||
+      req.body[this.property].length >= PW_MAX_LEN
+    ) {
+      res.json({
+        errorMessage: `Your password must be between 5 and 64 characters in length`,
+      });
+      return;
+    }
+    next();
+  };
+
   // Check if stirng contains the provided seeds
   // options include: isCaseSensitive (boolean) (default: true), minOccurances: (integer) (default 1)
   contains = (req, res, next, seed, options) => {
     // Ensure that user-provided seed is of String type
     if (typeof seed !== String) {
-      res.json("Invalid seed provided.");
+      res.json({ errorMessage: "Invalid seed provided." });
       return;
     }
     // Create regex using seed.
     const regex = new RegExp(seed, !options.isCaseSensitive ? "g" : "gi");
     regex.matchAll(req.body[this.property]).length >= options.minOccurances
       ? next()
-      : res.json("User input does not meet acceptance criteria.");
+      : res.json({
+          errorMessage: "User input does not meet acceptance criteria.",
+        });
   };
 
   equals = (req, res, next, seed) => {
     if (typeof seed !== String || typeof seed !== Number) {
-      res.json("Invalid seed provided.");
+      res.json({ errorMessage: "Invalid seed provided." });
       return;
     }
     req.body[this.property] === seed
       ? next()
-      : res.json("Provided input does not meet acceptance criteria");
+      : res.json({
+          errorMessage: "Provided input does not meet acceptance criteria",
+        });
   };
 
   // Validate email matches a specific regex pattern
   validateEmail = (req, res, next) => {
     if (!req.body[this.property]) {
-      res.status(400).json("No email found in request body.");
+      res.json({ errorMessage: "No email found in request body." });
       return;
     }
     req.body[this.property].match(/[\w_\-\.]+@[\w_\-\.]+\.[\w]+/g)
       ? next()
-      : res.json("Invalid email provided.");
+      : res.json({ errorMessage: "Invalid email provided." });
   };
 
   // Remove characters from input
@@ -73,7 +93,7 @@ class Validator {
   blacklistSanitize = (req, res, next, items, options) => {
     // Check that user-provided input is of either array or string type
     if (typeof items !== Array || items.length === 0) {
-      res.json("Error processing input.");
+      res.json({ errorMessage: "Error processing input." });
       return;
     }
     // if string type, split into array and assign to input variable
@@ -83,7 +103,7 @@ class Validator {
 
   blacklist = (req, res, next, items, options) => {
     if (typeof items !== Array || items.length === 0) {
-      res.json("Error processing input.");
+      res.json({ errorMessage: "Error processing input." });
       return;
     }
 
@@ -103,9 +123,10 @@ class Validator {
 
 const checkForToken = (req, res, next) => {
   if (!req.headers.authorization) {
-    res.json(
-      "You do not have the required permissions to access this resource."
-    );
+    res.json({
+      errorMessage:
+        "You do not have the required permissions to access this resource.",
+    });
   }
   next();
 };

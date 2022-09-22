@@ -39,51 +39,42 @@ const userController = {
   },
 
   // Register
-  register(req, res) {
-    User.create({
+  async register(req, res) {
+    const user = await User.create({
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
       password: req.body.password,
-    })
-      .then((userData) => {
-        console.log(userData);
-        const token = jwt.sign(
-          {
-            data: [userData.id, userData.email],
-          },
-          secret,
-          { expiresIn: "2h" }
-        );
-        res.json({ user: userData, token: token });
-      })
-      .catch((err) => res.json(err));
+    });
+
+    const token = jwt.sign(
+      {
+        data: [user.id, user.email],
+      },
+      secret,
+      { expiresIn: "2h" }
+    );
+    res.json({ user: user, token: token });
   },
 
   // login
-  login(req, res) {
-    User.findOne({
+  async login(req, res) {
+    const user = await User.findOne({
       where: {
         email: req.body.email,
       },
-    })
-      .then((userData) => {
-        if (!userData) {
-          res.json("User does not exist.");
-          return;
-        }
-        const token = jwt.sign(
-          { data: [userData.id, userData.email] },
-          secret,
-          {
-            expiresIn: "2h",
-          }
-        );
-        res.json({ user: userData, token: token });
-      })
-      .catch((err) => {
-        res.json(err);
-      });
+    });
+
+    if (!user || user.password !== req.body.password) {
+      res.json({ errorMessage: "Invalid user credentials provided." });
+      return;
+    }
+
+    const token = jwt.sign({ data: [user.id, user.email] }, secret, {
+      expiresIn: "2h",
+    });
+
+    res.json({ user: userData, token: token });
   },
 
   // Update User
