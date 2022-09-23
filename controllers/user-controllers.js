@@ -72,6 +72,8 @@ const userController = {
       },
     });
 
+    console.log(user.password);
+
     if (!user) {
       res.json({ errorMessage: "Invalid user credentials provided." });
       return;
