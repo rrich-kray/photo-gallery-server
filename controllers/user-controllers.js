@@ -77,6 +77,11 @@ const userController = {
       return;
     }
 
+    if (user && user.password !== req.body.password) {
+      res.json({ errorMessage: "Invalid user credentials provided." });
+      return;
+    }
+
     const token = jwt.sign({ data: [user.id, user.email] }, secret, {
       expiresIn: "2h",
     });
