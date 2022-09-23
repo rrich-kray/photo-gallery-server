@@ -15,7 +15,7 @@ Image.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    isAvatar: {
+    is_avatar: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
