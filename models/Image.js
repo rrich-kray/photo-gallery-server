@@ -1,5 +1,5 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/connection');
+const { Model, DataTypes } = require("sequelize");
+const sequelize = require("../config/connection");
 
 class Image extends Model {}
 
@@ -11,18 +11,20 @@ Image.init(
       primaryKey: true,
       autoIncrement: true,
     },
-
     filename: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-
+    isAvatar: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
     post_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'post',
-        key: 'id',
+        model: "post",
+        key: "id",
       },
     },
   },
@@ -31,7 +33,7 @@ Image.init(
     timestamps: true,
     underscored: true,
     freezeTableName: true,
-    modelName: 'image',
+    modelName: "image",
   }
 );
 

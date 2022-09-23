@@ -40,6 +40,13 @@ const userController = {
 
   // Register
   async register(req, res) {
+    const user1 = await User.findOne({ where: { email: req.body.email } });
+    if (user1) {
+      res.json({
+        errorMessage: "A user is already registered with this email account.",
+      });
+      return;
+    }
     const user = await User.create({
       first_name: req.body.first_name,
       last_name: req.body.last_name,
