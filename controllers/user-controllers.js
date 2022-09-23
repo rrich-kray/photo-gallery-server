@@ -71,8 +71,9 @@ const userController = {
         email: req.body.email,
       },
     });
+    console.log(user);
 
-    if (!user || user.password !== req.body.password) {
+    if (user === null || user.password !== req.body.password) {
       res.json({ errorMessage: "Invalid user credentials provided." });
       return;
     }
