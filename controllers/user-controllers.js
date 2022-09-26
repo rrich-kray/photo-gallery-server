@@ -74,7 +74,7 @@ const userController = {
       },
     });
 
-    if (!user || user?.checkPassword(req.body.password)) {
+    if (!user || !user?.checkPassword(req.body.password)) {
       res.json({ errorMessage: "Invalid user credentials provided." });
       return;
     }
