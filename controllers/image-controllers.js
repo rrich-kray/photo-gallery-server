@@ -6,7 +6,7 @@ const imageController = {
     Image.create({
       filename: req.body.filename,
       post_id: req.body.post_id,
-      isAvatar: req.body.isAvatar,
+      is_avatar: req.body.is_avatar,
     })
       .then((response) => {
         console.log(response);
