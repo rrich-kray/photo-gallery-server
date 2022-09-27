@@ -30,11 +30,12 @@ const userController = {
               },
             ],
           },
-          {
-            model: UserFollower,
-          },
+          // {
+          //   model: UserFollower,
+          // },
         ],
       });
+      res.json(user);
     } catch (e) {
       res.json({ errorMessage: "Error fetching user data." });
     }
