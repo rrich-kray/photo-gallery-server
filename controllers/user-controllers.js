@@ -1,5 +1,6 @@
 const { User, Post, Comment, Image } = require("../models/");
 const jwt = require("jsonwebtoken");
+const UserFollower = require("../models/UserFollower");
 require("dotenv").config;
 const secret = process.env.SECRET;
 
@@ -10,32 +11,34 @@ const userController = {
       .catch((err) => res.json(err));
   },
 
-  getUserById(req, res) {
-    User.findOne({
-      where: {
-        id: req.params.userId,
-      },
-
-      include: [
-        {
-          model: Post,
-          include: [
-            {
-              model: Comment,
-            },
-            {
-              model: Image,
-            },
-          ],
+  async getUserById(req, res) {
+    try {
+      const user = await User.findOne({
+        where: {
+          id: req.params.userId,
         },
-      ],
-    })
-      .then((userData) => {
-        res.json(userData);
-      })
-      .catch((err) => {
-        res.json(err);
+
+        include: [
+          {
+            model: Post,
+            include: [
+              {
+                model: Comment,
+              },
+              {
+                model: Image,
+              },
+            ],
+          },
+          // {
+          //   model: UserFollower,
+          // },
+        ],
       });
+      res.json(user);
+    } catch (e) {
+      res.json({ errorMessage: "Error fetching user data." });
+    }
   },
 
   // Register
@@ -72,12 +75,7 @@ const userController = {
       },
     });
 
-    if (!user) {
-      res.json({ errorMessage: "Invalid user credentials provided." });
-      return;
-    }
-
-    if (!user.checkPassword(req.body.password)) {
+    if (!user || !user?.checkPassword(req.body.password)) {
       res.json({ errorMessage: "Invalid user credentials provided." });
       return;
     }
@@ -123,6 +121,11 @@ const userController = {
       .catch((err) => {
         res.json({ data: err, message: err.message });
       });
+  },
+
+  // follow user
+  async followUser(req, res) {
+    await UserFollower.create(req.body);
   },
 };
 
