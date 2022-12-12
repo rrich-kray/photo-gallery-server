@@ -2,44 +2,44 @@ const UserFollower = require("../models/UserFollower.js");
 
 const UserFollowerData = [
   {
-    user_id: 1,
-    follower_id: 2,
+    follower: 1,
+    following: 2,
   },
   {
-    user_id: 2,
-    follower_id: 1,
+    follower: 2,
+    following: 3,
   },
   {
-    user_id: 3,
-    follower_id: 4,
+    follower: 3,
+    following: 4,
   },
   {
-    user_id: 2,
-    follower_id: 5,
+    follower: 4,
+    following: 5,
   },
   {
-    user_id: 7,
-    follower_id: 5,
+    follower: 6,
+    following: 7,
   },
   {
-    user_id: 6,
-    follower_id: 5,
+    follower: 7,
+    following: 8,
   },
   {
-    user_id: 6,
-    follower_id: 10,
+    follower: 7,
+    following: 6,
   },
   {
-    user_id: 10,
-    follower_id: 5,
+    follower: 9,
+    following: 10,
   },
   {
-    user_id: 2,
-    follower_id: 8,
+    follower: 10,
+    following: 5,
   },
   {
-    user_id: 4,
-    follower_id: 5,
+    follower: 2,
+    following: 8,
   },
 ];
 

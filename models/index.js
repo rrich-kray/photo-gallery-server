@@ -99,16 +99,14 @@ Image.belongsTo(Post, {
   foreignKey: "post_id",
 });
 
-User.belongsToMany(User, {
+User.hasMany(UserFollower, {
   as: "Followers",
-  foreignKey: "user_id",
-  through: UserFollower,
+  foreignKey: "follower",
 });
 
-User.belongsToMany(User, {
-  as: "UserFollowers",
-  foreignKey: "follower_id",
-  through: UserFollower,
+User.hasMany(UserFollower, {
+  as: "following",
+  foreignKey: "following",
 });
 
 module.exports = {

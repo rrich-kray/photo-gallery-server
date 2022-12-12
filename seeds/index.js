@@ -13,8 +13,6 @@ const seedAll = async () => {
   console.log(`----------DATABASE SYNCED----------`);
   await seedUsers();
   console.log(`----------USERS SYNCED----------`);
-  await seedUserFollowers();
-  console.log(`----------FOLLOWERS SYNCED----------`);
   await seedPosts();
   console.log(`----------POSTS SYNCED----------`);
   await seedTags();
@@ -27,6 +25,8 @@ const seedAll = async () => {
   console.log(`----------DOWNVOTES SYNCED----------`);
   await seedImages();
   console.log(`----------IMAGES SYNCED----------`);
+  await seedUserFollowers();
+  console.log(`----------FOLLOWERS SYNCED----------`);
   process.exit(0);
 };
 

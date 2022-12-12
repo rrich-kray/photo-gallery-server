@@ -2,33 +2,33 @@ const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 const bcrypt = require("bcrypt");
 
-// Every time somebody is followed, a new entry will be created
+// Every time somebody is followed, a new entry will be created that will contain IDs of the follower and followed
 class UserFollower extends Model {}
 
 UserFollower.init(
   {
     id: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
 
-    user_id: {
-      type: DataTypes.BIGINT,
+    follower: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: "user",
-        key: "user_id",
+        key: "id",
       },
     },
 
-    follower_id: {
-      type: DataTypes.BIGINT,
+    following: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: "user",
-        key: "user_id",
+        key: "id",
       },
     },
   },
