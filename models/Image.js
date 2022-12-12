@@ -3,6 +3,7 @@ const sequelize = require("../config/connection");
 
 class Image extends Model {}
 
+// Image files are indirectly associated with users through posts
 Image.init(
   {
     id: {

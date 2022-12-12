@@ -3,6 +3,7 @@ const { Op } = require("sequelize");
 const uniqid = require("uniqid");
 const path = require("path");
 const fs = require("fs");
+import { uploadFile } from "../utils/uploadFile";
 
 const postController = {
   // Query all posts
@@ -200,6 +201,7 @@ const postController = {
   // Create entry in Image model with unique filename and user id.
 
   // Want to consolidate routes that create the post, upload the image, and create the image entry in the Image table
+  // TODO: Add image validation middleware
   uploadFile(req, res) {
     if (!req.files) {
       res.send({
@@ -213,8 +215,9 @@ const postController = {
     const extension = originalFilenameArr[originalFilenameArr.length - 1];
     const filename = uniqid();
     const filenameExt = filename + "." + extension;
-    // The problem uploading images may be associated with the file path
-    file.mv(path.join(__dirname, "../uploads", filenameExt));
+    // file.mv(path.join(__dirname, "../uploads", filenameExt));
+    // Upload file to AWS
+    uploadFile(filenameExt);
     res.send(filenameExt);
   },
 };
