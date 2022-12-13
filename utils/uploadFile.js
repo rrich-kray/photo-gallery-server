@@ -1,44 +1,38 @@
 const aws = require("aws-sdk");
-const axios = require("axios");
 
 // I can either upload the file directly from the client, or include this logic in the server.
 // For former, I will have to modify the logic below so that the file is properly renamed to conform with SQL Database.
-// Latter is simpler implementation but greater strain on server resources.
+// Latter is simpler implementation but greater strain on server resources. However I could use a third-party image validation middleware
 
 // import credentials from a .env file
 require("dotenv").config();
 
-aws.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
-});
-
-// Create new instance of s3 bucket, get signed url, upload image to bucket
 module.exports.uploadFile = function (file) {
-  const s3 = new aws.S3();
-
-  const params = {
-    bucket: process.env.AWS_BUCKET,
-    Key: file.name,
-    expires: 60,
-    ContentType: file.type,
-  };
-
-  // Get signed URL, then use that URL in an axios request in callback
-  s3.getSignedUrl("putObject", params, (err, signedUrl) => {
-    if (err) {
-      console.log(err);
-      return err;
-    } else {
-      console.log(signedUrl);
-
-      // Make axios request
-      axios
-        .put(signedUrl, file)
-        .then((response) => console.log(response))
-        .catch((err) => console.log(err));
-
-      return signedUrl;
-    }
+  // S3 bucket object uses credentials for rrich-kray user, an IAM role that has access only to PutObject
+  // and GetObject actions for the rrich-pinterest-clone-bucket
+  // Key for the file will be the filename, which is how the image files will be accessed on the frontend
+  // This method will be provided with a renamed file via the post controller
+  const s3Obj = new aws.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+    region: process.env.AWS_REGION,
+    params: {
+      Bucket: process.env.AWS_BUCKET,
+    },
   });
+
+  s3Obj.upload(
+    {
+      Key: file.name,
+      body: file,
+    },
+    (err, data) => {
+      if (err) {
+        console.log(err);
+        return err;
+      } else {
+        console.log("Uploaded data at " + data.Location);
+      }
+    }
+  );
 };

@@ -202,6 +202,7 @@ const postController = {
 
   // Want to consolidate routes that create the post, upload the image, and create the image entry in the Image table
   // TODO: Add image validation middleware
+  // This route will accept the image, rename the file, upload the file to the AWS s3 bucket, then send the new file name back to the client so that it can create the appropriate entry in the image table
   uploadFile(req, res) {
     if (!req.files) {
       res.send({
@@ -211,13 +212,11 @@ const postController = {
       return;
     }
     const file = req.files.file;
-    const originalFilenameArr = file.name.split(".");
-    const extension = originalFilenameArr[originalFilenameArr.length - 1];
-    const filename = uniqid();
-    const filenameExt = filename + "." + extension;
+    const newFilename = `${uniqid()}.${file.type}`;
+    const newFile = new File([file], newFilename, { type: file.type });
     // file.mv(path.join(__dirname, "../uploads", filenameExt));
     // Upload file to AWS
-    uploadFile(filenameExt);
+    uploadFile(newFile);
     res.send(filenameExt);
   },
 };
