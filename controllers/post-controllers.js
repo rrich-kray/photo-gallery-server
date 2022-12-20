@@ -3,7 +3,7 @@ const { Op } = require("sequelize");
 const uniqid = require("uniqid");
 const path = require("path");
 const fs = require("fs");
-import { uploadFile } from "../utils/uploadFile";
+const { uploadToS3 } = require("../utils/uploadFile");
 
 const postController = {
   // Query all posts
@@ -212,12 +212,18 @@ const postController = {
       return;
     }
     const file = req.files.file;
-    const newFilename = `${uniqid()}.${file.type}`;
-    const newFile = new File([file], newFilename, { type: file.type });
+    const key = uniqid();
+    // const newFilename = `${uniqid()}.${file.type}`;
+    // const newFile = new File([file], newFilename, { type: file.type });
     // file.mv(path.join(__dirname, "../uploads", filenameExt));
     // Upload file to AWS
-    uploadFile(newFile);
-    res.send(filenameExt);
+
+    // error: params.Body is required - Solved
+    // error: unsupported body payload object - Solved
+    // Error: Access denied
+    const base64Data = Buffer.from(JSON.stringify(file), "binary");
+    uploadToS3(base64Data, key);
+    res.send(key);
   },
 };
 

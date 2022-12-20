@@ -7,7 +7,7 @@ const aws = require("aws-sdk");
 // import credentials from a .env file
 require("dotenv").config();
 
-module.exports.uploadFile = function (file) {
+module.exports.uploadToS3 = function (file, key) {
   // S3 bucket object uses credentials for rrich-kray user, an IAM role that has access only to PutObject
   // and GetObject actions for the rrich-pinterest-clone-bucket
   // Key for the file will be the filename, which is how the image files will be accessed on the frontend
@@ -23,8 +23,8 @@ module.exports.uploadFile = function (file) {
 
   s3Obj.upload(
     {
-      Key: file.name,
-      body: file,
+      Key: key,
+      Body: file,
     },
     (err, data) => {
       if (err) {
