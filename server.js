@@ -12,15 +12,20 @@ const { validateFileType, checkForToken } = require("./utils/middleware");
 app.use(fileUpload({ createParentPath: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+/*
 app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://photo-gallery-client-rrich.herokuapp.com",
+      "https://photo-gallery-client-rrich.herokuapp.com/",
     ],
     credentials: true,
   })
 );
+*/
+
+app.use(cors())
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", '*');
