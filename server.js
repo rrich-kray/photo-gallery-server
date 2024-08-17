@@ -51,7 +51,7 @@ Middleware
 */
 
 // sequelize.sync() creates new tables according to the schema specified in the model
-sequelize.sync({ force: true });
+sequelize.sync({ force: false });
 
 const server = app.listen(PORT, () => {
   console.log(`Now listening on port ${PORT}`);
