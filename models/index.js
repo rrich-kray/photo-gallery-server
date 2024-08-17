@@ -5,7 +5,7 @@ const Upvote = require("./Upvote");
 const Downvote = require("./Downvote");
 const Tag = require("./Tag");
 const Image = require("./Image");
-const UserFollower = require("./UserFollower");
+//const UserFollower = require("./UserFollower");
 
 User.hasMany(Post, {
   foreignKey: "user_id",
@@ -99,6 +99,7 @@ Image.belongsTo(Post, {
   foreignKey: "post_id",
 });
 
+/*
 User.hasMany(UserFollower, {
   as: "Followers",
   foreignKey: "follower",
@@ -108,6 +109,7 @@ User.hasMany(UserFollower, {
   as: "following",
   foreignKey: "following",
 });
+*/
 
 module.exports = {
   User,
@@ -116,6 +118,6 @@ module.exports = {
   Downvote,
   Post,
   Tag,
-  Image,
-  UserFollower,
+  Image
+  //UserFollower,
 };

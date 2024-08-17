@@ -18,6 +18,7 @@ Image.init(
     is_avatar: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false
     },
     post_id: {
       type: DataTypes.INTEGER,

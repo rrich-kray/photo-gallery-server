@@ -1,6 +1,6 @@
 const { User, Post, Comment, Image } = require("../models/");
 const jwt = require("jsonwebtoken");
-const UserFollower = require("../models/UserFollower");
+//const UserFollower = require("../models/UserFollower");
 require("dotenv").config;
 const secret = process.env.SECRET;
 
@@ -124,9 +124,11 @@ const userController = {
   },
 
   // follow user
+  /*
   async followUser(req, res) {
     await UserFollower.create(req.body);
   },
+  */
 };
 
 module.exports = userController;
